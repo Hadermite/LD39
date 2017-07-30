@@ -1,2 +1,11 @@
-# Moon Base Disaster - Ludum Dare 39
-This is my entry for the competition **Ludum Dare 39**. More info coming soon...
+using UnityEngine;
+
+public class DialogueController : MonoBehaviour {
+
+    private AudioClip[] phrases;
+
+    private void Start() {
+        phrases = (AudioClip[])Resources.LoadAll("Audio/Dialogue", typeof(AudioClip));
+        Debug.Log(phrases.Length);
+    }
+}

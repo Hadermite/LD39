@@ -22,6 +22,25 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void Update() {
+        if (Cursor.lockState != CursorLockMode.Locked) {
+            if (Input.GetMouseButtonDown(0)) {
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+        }
+
+        // Check for button presses
+        if (Input.GetMouseButtonDown(0)) {
+            RaycastHit hit;
+
+            Ray ray = camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+            if (Physics.Raycast(ray, out hit, 3f)) {
+                ControllerButton button = hit.transform.GetComponent<ControllerButton>();
+                if (button != null) {
+                    button.Click();
+                }
+            }
+        }
+
         // Update position
         float vertical = Input.GetAxisRaw("Vertical");
         float horiztonal = Input.GetAxisRaw("Horizontal");
@@ -36,6 +55,11 @@ public class PlayerController : MonoBehaviour {
         // Update rotation
         float verticalMouse = Input.GetAxisRaw("Mouse X");
         float horizontalMouse = Input.GetAxisRaw("Mouse Y");
+
+        if (Cursor.lockState != CursorLockMode.Locked) {
+            verticalMouse = 0;
+            horizontalMouse = 0;
+        }
 
         // Update body rotation (y axis)
         Vector3 bodyRotation = transform.rotation.eulerAngles;
