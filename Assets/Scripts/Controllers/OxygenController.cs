@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class OxygenController : MonoBehaviour {
 
@@ -15,8 +16,15 @@ public class OxygenController : MonoBehaviour {
         set {
             _oxygen = Mathf.Clamp(value, 0, maxOxygen);
             oxygenProgressBar.Progress = _oxygen / maxOxygen;
+            if (_oxygen == 0) {
+                Scenes.message = "You ran out of oxygen :(";
+                SceneManager.LoadScene("MenuScene");
+                return;
+            }
         }
     }
+
+    public bool OxygenGeneratorOn { get; set; }
 
     public ProgressBar oxygenProgressBar;
 
@@ -28,9 +36,19 @@ public class OxygenController : MonoBehaviour {
         }
         Instance = this;
         Oxygen = maxOxygen;
+        OxygenGeneratorOn = true;
     }
 
     private void Update() {
+        if (!ObjectiveController.Instance.HasBeenInController) return;
+        if (OxygenGeneratorOn && ElectricityController.Instance.Electricity > 0) {
+            Oxygen += maxOxygen / 10 * Time.deltaTime;
+        }
         Oxygen -= oxygenConsumption * Time.deltaTime;
+    }
+
+    public bool ToggleOxygenGenerator() {
+        OxygenGeneratorOn = !OxygenGeneratorOn;
+        return OxygenGeneratorOn;
     }
 }

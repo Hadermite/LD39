@@ -25,6 +25,7 @@ public class LightsController : MonoBehaviour {
     }
 
     private void Update() {
+        if (!ObjectiveController.Instance.HasBeenInController) return;
         ElectricityController ec = ElectricityController.Instance;
         if (insideLightsOn) ec.Electricity -= insideConsumption * Time.deltaTime;
         if (outsideLightsOn) ec.Electricity -= outsideConsumption * Time.deltaTime;

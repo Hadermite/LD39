@@ -15,17 +15,17 @@ public class ControllerButton : MonoBehaviour {
         // Bad code, replace if I have time later on.
         bool on = false;
         switch (transform.name) {
+            case "Suppress Alarm Button":
+                AlarmController.Instance.StopAlarm();
+                break;
             case "Inside Lights Button":
                 on = LightsController.Instance.ToggleInsideLights();
                 break;
             case "Outside Lights Button":
                 on = LightsController.Instance.ToggleOutsideLights();
                 break;
-            case "Suppress Alarm Button":
-                AlarmController.Instance.StopAlarm();
-                break;
             case "Oxygen Generator Button":
-                // TODO: Toggle oxygen generator.
+                on = OxygenController.Instance.ToggleOxygenGenerator();
                 break;
             default:
                 Debug.LogError("Unknown button! Add to Switch statement! (" + transform.name + ")");

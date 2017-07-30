@@ -41,7 +41,6 @@ public class DialogueController : MonoBehaviour {
 
         yield return new WaitForSeconds(3f);
         subtitle.text = "";
-        ObjectiveController.Instance.StartObjective(Objective.CheckControllerRoom);
     }
 }
 

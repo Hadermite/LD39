@@ -10,9 +10,12 @@ public class ObjectiveController : MonoBehaviour {
     public Transform player;
     public Transform objectivePanel;
     public Text objectiveText;
+
+    public bool HasBeenInController { get; private set; }
+
     private bool hasDisplayedDisableThings;
     private List<string> objectivesShown = new List<string>();
-    private float timer;
+    private float timer, startFirstTimer;
 
     private void Start() {
         if (Instance != null) {
@@ -25,9 +28,15 @@ public class ObjectiveController : MonoBehaviour {
     }
 
     private void Update() {
+        startFirstTimer += Time.deltaTime;
+        if (startFirstTimer >= 6f) {
+            StartObjective(Objective.CheckControllerRoom);
+        }
+
         if (hasDisplayedDisableThings) return;
         Vector3 pos = player.position;
         if (pos.x > 250 && pos.x < 275 && pos.z > 287 && pos.z < 305) {
+            HasBeenInController = true;
             timer += Time.deltaTime;
             if (timer >= 3f) {
                 hasDisplayedDisableThings = true;
@@ -40,6 +49,8 @@ public class ObjectiveController : MonoBehaviour {
         if (objectivesShown.Contains(objective)) return;
         if (objective == Objective.CheckControllerRoom &&
             objectivesShown.Contains(Objective.DisableThings)) return;
+        if (objective == Objective.DisableThings &&
+            objectivesShown.Contains(Objective.RepairGenerator)) return;
 
         objectivesShown.Add(objective);
         StartCoroutine(DisplayObjective(objective));
@@ -57,4 +68,5 @@ public class ObjectiveController : MonoBehaviour {
 public class Objective {
     public const string CheckControllerRoom = "Check what's wrong in the controller room";
     public const string DisableThings = "Disable things that you don't need in order to save power";
+    public const string RepairGenerator = "Repair the generator by pressing E when next to it";
 }
